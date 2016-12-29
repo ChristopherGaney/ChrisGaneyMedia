@@ -51,7 +51,7 @@ app.post('/', function(req, res) {
 		
 		var initialState = {
 			message: message,
-			data: posts,
+			posts: posts,
 			feature: feature
 		}
 		
@@ -82,7 +82,7 @@ app.get(['/', '/articles'], function(req, res) {
 		
 			var initialState = {
 				message: 'yes',
-				data: posts,
+				posts: posts,
 				feature: feature
 			};
 			console.log(initialState);

@@ -11,6 +11,8 @@ var Index = React.createClass({
 			<head>
 				<meta charSet="utf-8" />
 				<title>ChrisGaneyMedia</title>
+				<link rel="stylesheet" href="css/normalize.css" />
+				<link rel="stylesheet" href="css/my_skeleton.css" />
 				<link rel="stylesheet" href="css/style.css" />
 				<script dangerouslySetInnerHTML={{__html: this.props.initialState}} />
 			</head>

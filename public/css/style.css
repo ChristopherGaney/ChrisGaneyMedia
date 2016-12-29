@@ -33,7 +33,9 @@ body {
 	padding-bottom: 12rem;
 	padding-left: 3rem;
 	padding-right: 3rem; }
-
+.article_name {
+	cursor: pointer;
+}
 	
 .links, .main_content h2 {
 	text-align: center; }
@@ -41,3 +43,12 @@ body {
 .links h5 {
 	display: inline;
 	margin: 2rem; }
+	
+.col-main {
+	width: 74.0%;
+	}
+.col-right {
+	width: 22.0%;
+	}
+	
+	

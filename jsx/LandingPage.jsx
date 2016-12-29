@@ -2,6 +2,7 @@
 
 var React = require('react');
 var ReactRedux = require('react-redux');
+var ArticleList = require('./ArticleList');
 var marked = require('marked');
 var axios = require('axios');
 
@@ -23,16 +24,30 @@ var axios = require('axios');
 				  });
 	},
 	 componentDidMount: function() {
-		this.loadPageFromServer();
+		//this.loadPageFromServer();
 	},
 	componentWillMount: function() {
 		console.log(this.props.message);
 	},
+	getArticle: function(id) {
+		
+	},
   render: function() {
-    return <div className="main_content">
-				<div className="welcome">
-					<h2>{this.props.data[0]['blogname']}</h2>
-					<h3>{this.props.feature}</h3>
+    return <div className="row main_content">
+				<div className="col-main">
+					<div className="welcome">
+						<h2>Welcome to my blog where I discuss Javascript,
+							Node, React, functional programming, and other
+							things fun and cool
+						</h2>
+					</div>
+					<div className="blogbox">
+						<h2>{this.props.posts[0]['blogname']}</h2>
+						<h3>{this.props.feature}</h3>
+					</div>
+				</div>
+				<div className="col-right">
+					<ArticleList posts={this.props.posts} getArticle={this.getArticle} />
 				</div>
 			</div>
   }
@@ -41,7 +56,7 @@ var axios = require('axios');
 var LandingPageState = function(state) {
   return {
     message: state.message,
-    data: state.data,
+    posts: state.posts,
     feature: state.feature
   }
 }
