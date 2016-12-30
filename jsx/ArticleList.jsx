@@ -4,11 +4,9 @@ var React = require('react');
 var ReactRedux = require('react-redux');
 
 module.exports = React.createClass({
-		componentWillMount: function() {
-			console.log(this.props.posts);
-		},
+		
 		onChoose: function(id) {
-		console.log('choosen');
+			console.log('choosen');
 			this.props.getArticle(id);
 		},
   render: function() {

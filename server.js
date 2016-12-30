@@ -29,38 +29,28 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 
 
-app.post('/', function(req, res) {
-
-	BlogPost.getAllPostsById(null, function(err, posts) {
-		console.log(posts);
-		var message = 'yes';
-		var feature = '';
-		var identifier;
-		if(posts) {
-			identifier = posts[0]._id;
-			PostBody.getBodyByPostId(identifier, function(err, post) {
-				if(post) {
-					feature = post;
-				}
-			});			
+app.post('/articles', function(req, res) {
+	
+	var id = req.body.id;
+	var message = 'yes';
+	var feature = '';
+	
+	PostBody.getBodyByPostId(id, function(err, post) {
+		if(post) {
+			feature = post;
+	
+			var initialState = {
+				message: message,
+				feature: feature,
+				url: '/articles'
+			}
+			
+			res.json(initialState);
 		}
-		else {
-			message = 'There are no posts to display.';
-		}
-		console.log(req.url);
-		
-		var initialState = {
-			message: message,
-			posts: posts,
-			feature: feature
-		}
-		
-		res.json(initialState);
-	});
-    
+	});		
 });
 
-app.get(['/', '/articles'], function(req, res) {
+app.get('/', function(req, res) {
   var ReactRouter = require('react-router');
   var match = ReactRouter.match;
   var RouterContext = React.createFactory(ReactRouter.RouterContext);
@@ -77,13 +67,15 @@ app.get(['/', '/articles'], function(req, res) {
 			identifier = posts[0]._id;
 			PostBody.getBodyByPostId(identifier, function(err, post) {
 				if(post) {
-					feature = post.postbody;
+					feature = post;
 				}
 		
 			var initialState = {
 				message: 'yes',
 				posts: posts,
-				feature: feature
+				feature: feature,
+				url: '/'
+				
 			};
 			console.log(initialState);
 			store = store.configureStore(initialState);

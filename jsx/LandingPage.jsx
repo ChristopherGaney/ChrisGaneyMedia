@@ -5,15 +5,18 @@ var ReactRedux = require('react-redux');
 var ArticleList = require('./ArticleList');
 var marked = require('marked');
 var axios = require('axios');
+var browserHistory = require('react-router').browserHistory;
 
  var LandingPage = React.createClass({
-	loadPageFromServer: function() {
-		
-		axios.post('/page')
+	
+	talkToServer: function(dats) {
+		console.log(dats.id);
+		axios.post(dats.toPage, {id: dats.id})
 				  .then(function (response) {
 					if(response.data.message === 'yes') {
-						console.log('Retrieved!');
-						 this.props.loadPage(response.data);
+						console.log(this.props.history);
+						 this.props.loadArticle({feature: response.data.feature, url: response.data.url});
+						 browserHistory.push(response.data.url);
 						}
 					else {
 						console.log(response.data.message);
@@ -23,14 +26,8 @@ var axios = require('axios');
 					console.log(error);
 				  });
 	},
-	 componentDidMount: function() {
-		//this.loadPageFromServer();
-	},
-	componentWillMount: function() {
-		console.log(this.props.message);
-	},
 	getArticle: function(id) {
-		
+		this.talkToServer({ toPage: '/articles', id: id });
 	},
   render: function() {
     return <div className="row main_content">
@@ -43,7 +40,7 @@ var axios = require('axios');
 					</div>
 					<div className="blogbox">
 						<h2>{this.props.posts[0]['blogname']}</h2>
-						<h3>{this.props.feature}</h3>
+						<h3>{this.props.feature.postbody}</h3>
 					</div>
 				</div>
 				<div className="col-right">
@@ -63,9 +60,9 @@ var LandingPageState = function(state) {
 
 var LandingPageDispatch = function(dispatch) {
   return {
-    loadPage: function(data) {
+    loadArticle: function(data) {
       dispatch({
-        type: 'load_Page',
+        type: 'LOAD_ARTICLE',
         data: data
       })
     }

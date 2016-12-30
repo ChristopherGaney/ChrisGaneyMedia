@@ -50,5 +50,11 @@ body {
 .col-right {
 	width: 22.0%;
 	}
+.col-center {
+	width: 65.3333333333%;
+}
+.col-marg {
+	 width: 13.3333333333%;
+}
 	
 	
