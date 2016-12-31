@@ -13,11 +13,15 @@ var browserHistory = require('react-router').browserHistory;
 		this.props.fetchArticle({ message: 'loading...'});
 		axios.post(dats.toPage, { id: dats.id, blogname: dats.blogname })
 				  .then(function (response) {
-					
-					if(response.data.message === 'yes') {
+					if(response.data.message === 'yes' && dats.toPage === '/') {
+						 this.props.goHome({feature: response.data.feature, url: response.data.url});
+						 browserHistory.push(response.data.url);
+						}
+					else if(response.data.message === 'yes') {
 						 this.props.loadArticle({feature: response.data.feature, url: response.data.url});
 						 browserHistory.push(response.data.url);
 						}
+					
 					else {
 						this.props.fetchFailure({ message: 'Failure Loading Page'});
 						}
@@ -26,7 +30,11 @@ var browserHistory = require('react-router').browserHistory;
 					console.log(error);
 				  });
 	},
-	
+	getHomePage: function() {
+		var id = this.props.posts[0]._id;
+		var name = this.props.posts[0].blogname;
+		this.talkToServer({ toPage: '/', id: id, blogname: name});
+	},
 	getArticle: function(id,name) {
 		var blogname = name.trim().split(' ').join('-');
 		var url = '/articles/' + blogname + '/' + id;
@@ -35,12 +43,20 @@ var browserHistory = require('react-router').browserHistory;
   render: function() {
   
     return <div className="main_content">
-				
 				<div className="row">
-					<div className="col-marg">
+					<div className="col-nav">
+						<button className="home_btn" onClick={this.getHomePage} >
+							<p>home</p>
+						</button>
 					</div>
+				</div>
+				<div className="row">
+					
 					<div className="col-center">
 						<div className="blogbox">
+							<div className="date">
+								<h5>2016-12-26</h5>
+							</div>
 							<h2>{this.props.feature.blogname}</h2>
 							<h3>{this.props.feature.postbody}</h3>
 						</div>
@@ -48,8 +64,7 @@ var browserHistory = require('react-router').browserHistory;
 							<ArticleList posts={this.props.posts} getArticle={this.getArticle} />
 						</div>
 					</div>
-					<div className="col-marg">
-					</div>
+					
 				</div>
 			</div>
 	
@@ -75,6 +90,12 @@ var ArticlesDispatch = function(dispatch) {
     loadArticle: function(data) {
       dispatch({
         type: 'LOAD_ARTICLE',
+        data: data
+      })
+    },
+    goHome: function(data) {
+      dispatch({
+        type: 'GO_HOME',
         data: data
       })
     },

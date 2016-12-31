@@ -10,7 +10,18 @@ var Index = React.createClass({
 		<html>
 			<head>
 				<meta charSet="utf-8" />
+				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<title>ChrisGaneyMedia</title>
+				<meta name="Description" CONTENT="Articles discussing Javascript, Node, React, functional programming" />
+				<link rel="canonical" href="http://chrisganeymedia.com" />
+				<meta property="og:locale" content="en_US" />
+				<meta property="og:type" content="website" />
+				<meta property="og:title" content="A Javascript Blog" />
+				<meta property="og:description" content="Articles discussing Javascript, Node, React, functional programming" />
+				<meta property="og:url" content="http://chrisganeymedia.com" />
+				<meta property="og:image" content="http://chrisganeymedia.com/public/images/favicon.ico" />
+				<meta name="twitter:card" content="summary" />
+				<meta name="twitter:site" content="@ChrisGaneyMedia" />
 				<link rel="stylesheet" href="http://localhost:3000/static/css/normalize.css" />
 				<link rel="stylesheet" href="http://localhost:3000/static/css/my_skeleton.css" />
 				<link rel="stylesheet" href="http://localhost:3000/static/css/style.css" />

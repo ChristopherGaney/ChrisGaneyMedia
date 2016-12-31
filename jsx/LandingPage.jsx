@@ -31,21 +31,30 @@ var browserHistory = require('react-router').browserHistory;
 		this.talkToServer({ toPage: url, id: id, blogname: name});
 	},
   render: function() {
-    return <div className="row main_content">
-				<div className="col-main">
-					<div className="welcome">
+    return <div className="main_content">
+				<div className="row">
+					<div className="col-welcome welcome">
 						<h2>Welcome to my blog where I discuss Javascript,
 							Node, React, functional programming, and other
 							things fun and cool
 						</h2>
 					</div>
-					<div className="blogbox">
-						<h2>{this.props.feature.blogname}</h2>
-						<h3>{this.props.feature.postbody}</h3>
-					</div>
 				</div>
-				<div className="col-right">
-					<ArticleList posts={this.props.posts} blogId={this.props.feature.postid} getArticle={this.getArticle} />
+				<div className="row">
+					<div className="col-main">
+						<div className="home_box">
+							<div className="blogbox">
+								<div className="date">
+									<h5>2016-12-26</h5>
+								</div>
+								<h2>{this.props.feature.blogname}</h2>
+								<h3>{this.props.feature.postbody}</h3>
+							</div>
+						</div>
+					</div>
+					<div className="col-right">
+						<ArticleList posts={this.props.posts} blogId={this.props.feature.postid} getArticle={this.getArticle} />
+					</div>
 				</div>
 			</div>
   }

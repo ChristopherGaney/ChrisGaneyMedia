@@ -83,7 +83,7 @@
 		margin-left: 4%; 
 		}
 
-  [class*='col-']:first-child {
+  [class*='col-']:first-child {  
     margin-left: 0; 
 	}
 	
@@ -181,7 +181,7 @@ input[type="button"] {
   font-weight: 600;
   line-height: 38px;
   letter-spacing: .1rem;
-  text-transform: uppercase;
+  text-transform: none; /********<codeChange>I changed text-transform from Uppercase to none </codeChange>*************/
   text-decoration: none;
   white-space: nowrap;
   background-color: transparent;
