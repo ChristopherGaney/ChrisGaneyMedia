@@ -23,61 +23,77 @@ var db = mongoose.connection;
 var React = require('react');
 var ReactDOMServer = require('react-dom/server');
 
-app.use('/', express.static(path.join(__dirname, 'public')));
+app.use('/static', express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 
 
-app.post('/articles', function(req, res) {
-	
-	var id = req.body.id;
+app.post(['/', '/articles/:title/:postid'], function(req, res) {
+	var blogname= '';
+	var id;
+	if(req.path === '/') {
+		blogname = req.body.blogname;
+		id = req.body.id;
+	}
+	else {
+		blogname = req.params.title.split('-').join(' ');
+		id = req.params.postid;
+	}
 	var message = 'yes';
 	var feature = '';
 	
 	PostBody.getBodyByPostId(id, function(err, post) {
 		if(post) {
-			feature = post;
-	
+			feature = { postid: post.postid, postbody: post.postbody, blogname: blogname };
+
 			var initialState = {
 				message: message,
 				feature: feature,
-				url: '/articles'
+				url: req.path
 			}
-			
+	
 			res.json(initialState);
 		}
 	});		
 });
 
-app.get('/', function(req, res) {
+
+app.get(['/', '/articles/:title/:postid'], function(req, res) {
   var ReactRouter = require('react-router');
   var match = ReactRouter.match;
   var RouterContext = React.createFactory(ReactRouter.RouterContext);
   var Provider = React.createFactory(require('react-redux').Provider);
   var routes = require('./public/routes.js').routes
   var store = require('./public/redux-store');
+  var blogname = '';
+  var id = '';
   
+  if(req.params.title) {
+	  blogname = req.params.title.split('-').join(' ');
+	  id = req.params.postid;
+  }
+
 	BlogPost.getAllPostsById(function(err, posts) {
-		console.log(posts[0].blogname);
 		var message = 'yes';
 		var feature = '';
-		var identifier;
 		if(posts) {
-			identifier = posts[0]._id;
-			PostBody.getBodyByPostId(identifier, function(err, post) {
+			if(id === '') {
+				id = posts[0]._id;
+				blogname = posts[0].blogname;
+			}
+			PostBody.getBodyByPostId(id, function(err, post) {
 				if(post) {
-					feature = post;
+					feature = { postid: post.postid, postbody: post.postbody, blogname: blogname };
 				}
 		
 			var initialState = {
 				message: 'yes',
 				posts: posts,
 				feature: feature,
-				url: '/'
+				url: req.path
 				
 			};
-			console.log(initialState);
 			store = store.configureStore(initialState);
 
 			match({routes: routes, location: req.url}, function(error, redirectLocation, renderProps) {

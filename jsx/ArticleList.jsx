@@ -5,14 +5,15 @@ var ReactRedux = require('react-redux');
 
 module.exports = React.createClass({
 		
-		onChoose: function(id) {
+		onChoose: function(id,name) {
 			console.log('choosen');
-			this.props.getArticle(id);
+			this.props.getArticle(id,name);
 		},
   render: function() {
+		
 		var articleNodes = this.props.posts.map(function(article) {
 			return (
-				<Article blogname={article.blogname} key={article._id} id={article._id} onChoose={this.onChoose.bind(this,article._id)} />
+				<Article blogname={article.blogname} key={article._id} id={article._id} onChoose={this.onChoose.bind(this,article._id,article.blogname)} />
 			);
 		},this);
     return <div className="sidebar">

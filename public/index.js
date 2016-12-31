@@ -22,7 +22,9 @@ var Index = React.createClass({
 					null,
 					'ChrisGaneyMedia'
 				),
-				React.createElement('link', { rel: 'stylesheet', href: 'css/style.css' }),
+				React.createElement('link', { rel: 'stylesheet', href: 'http://localhost:3000/static/css/normalize.css' }),
+				React.createElement('link', { rel: 'stylesheet', href: 'http://localhost:3000/static/css/my_skeleton.css' }),
+				React.createElement('link', { rel: 'stylesheet', href: 'http://localhost:3000/static/css/style.css' }),
 				React.createElement('script', { dangerouslySetInnerHTML: { __html: this.props.initialState } })
 			),
 			React.createElement(
@@ -34,85 +36,10 @@ var Index = React.createClass({
 					React.createElement(
 						'div',
 						{ id: 'wrapper', className: 'container' },
-						React.createElement(Header, null),
-						this.props.children,
-						React.createElement(Footer, null)
+						this.props.children
 					)
 				),
-				React.createElement('script', { src: 'bundle.js' })
-			)
-		);
-	}
-});
-
-var Header = React.createClass({
-	displayName: 'Header',
-
-
-	render: function render() {
-		return React.createElement(
-			'header',
-			null,
-			React.createElement(
-				'div',
-				{ className: 'row' },
-				React.createElement(
-					'div',
-					{ className: 'col-header' },
-					React.createElement(
-						'div',
-						{ className: 'apptitle' },
-						React.createElement(
-							'h1',
-							null,
-							'ChrisGaneyMedia'
-						)
-					)
-				)
-			)
-		);
-	}
-});
-
-var Footer = React.createClass({
-	displayName: 'Footer',
-
-
-	render: function render() {
-		return React.createElement(
-			'footer',
-			null,
-			React.createElement(
-				'div',
-				{ className: 'row' },
-				React.createElement(
-					'div',
-					{ className: 'col-footer' },
-					React.createElement(
-						'div',
-						{ className: 'links' },
-						React.createElement(
-							'h5',
-							null,
-							'Privacy Policy'
-						),
-						React.createElement(
-							'h5',
-							null,
-							'About Us'
-						),
-						React.createElement(
-							'h5',
-							null,
-							'Contact'
-						),
-						React.createElement(
-							'h5',
-							null,
-							'Site Map'
-						)
-					)
-				)
+				React.createElement('script', { src: 'http://localhost:3000/static/bundle.js' })
 			)
 		);
 	}

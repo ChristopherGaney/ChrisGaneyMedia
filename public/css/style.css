@@ -5,9 +5,11 @@ html, body, container, main_content, iframe {
 	
 body {
   margin: 0;
-  padding: 0; }
+  padding: 0;
+  height: 100%; }
 
 .container {
+  min-height: 100%;
   position: relative;
   background-color: white; }
 
@@ -18,21 +20,55 @@ body {
   height: 12rem;
   background-color: #DAE6F7;
   opacity: 0.8; }
-  
-.apptitle {
+ 
+h1 {
+  font-size: 3rem;
+  font-family: Arial, Verdana, sans-serif;
+  font-weight: bold; }
+
+h2 {
+  font-size: 3rem; }
+
+h3 {
+  font-size: 2.5rem; }
+
+h4 {
+  font-size: 2rem; }
+
+h5 {
+  font-size: 1.7rem; }
+
+a {
+  text-decoration: none;
+  color: blue; }
+   
+.header {
+	margin-top: .5rem;
 	border-top: 1px solid blue;
-	border-bottom: 3px solid red;
+	border-bottom: 3px solid red; } 
+	 
+.apptitle {
+	
 	margin-bottom: 1.5rem; }
 	
 .apptitle h1 {
-	line-height: 3rem;
+	font-style: italic;
+	margin-left: 2rem;
 	padding-top: 1.5rem; }
-	
+.home_btn {
+	min-width: 10rem;
+	float: right;
+	margin-top: 1.5rem;
+	margin-right: 2rem;
+}	
+
 .main_content {
 	width: 100%;
-	padding-bottom: 12rem;
+	min-height: 30rem;
+    padding-bottom: 12rem; 
 	padding-left: 3rem;
 	padding-right: 3rem; }
+	
 .article_name {
 	cursor: pointer;
 }
@@ -43,7 +79,12 @@ body {
 .links h5 {
 	display: inline;
 	margin: 2rem; }
-	
+.col-header {
+	 width: 74.0%;
+}
+.col-nav {
+	width: 22%; 
+}	
 .col-main {
 	width: 74.0%;
 	}
@@ -54,7 +95,9 @@ body {
 	width: 65.3333333333%;
 }
 .col-marg {
-	 width: 13.3333333333%;
+	 width: 30.6666666667%;
 }
-	
+.col-links {
+	width: 48%;
+}	
 	

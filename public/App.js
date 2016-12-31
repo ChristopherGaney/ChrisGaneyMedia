@@ -2,38 +2,41 @@
 
 var React = require('react');
 var ReactRedux = require('react-redux');
+var Router = require('react-router').Router;
+var Route = require('react-router').Route;
+var Link = require('react-router').Link;
 var marked = require('marked');
 var axios = require('axios');
 var LandingPage = require('./LandingPage');
+var browserHistory = require('react-router').browserHistory;
 
 var App = React.createClass({
 	displayName: 'App',
 
-	loadPageFromServer: function loadPageFromServer() {
-
-		axios.post('/page').then(function (response) {
+	talkToServer: function talkToServer(dats) {
+		this.props.fetchArticle({ message: 'loading...' });
+		axios.post(dats.toPage, { id: dats.id, blogname: dats.blogname }).then(function (response) {
 			if (response.data.message === 'yes') {
-				console.log('Retrieved!');
-				this.props.loadPage(response.data);
+				this.props.goHome({ feature: response.data.feature, url: response.data.url });
+				browserHistory.push(response.data.url);
 			} else {
-				console.log(response.data.message);
+				this.props.fetchFailure({ message: 'Failure Loading Page' });
 			}
 		}.bind(this)).catch(function (error) {
 			console.log(error);
 		});
 	},
-	componentDidMount: function componentDidMount() {
-		this.loadPageFromServer();
-	},
-	componentWillMount: function componentWillMount() {
-		console.log(this.props.children);
+	getHomePage: function getHomePage(id) {
+		var id = this.props.posts[0]._id;
+		var name = this.props.posts[0].blogname;
+		this.talkToServer({ toPage: '/', id: id, blogname: name });
 	},
 	render: function render() {
 
 		return React.createElement(
 			'div',
-			{ id: 'wrapper', className: 'container' },
-			React.createElement(Header, null),
+			{ id: 'wrapper', className: 'wrapper' },
+			React.createElement(Header, { getHomePage: this.getHomePage }),
 			this.props.children,
 			React.createElement(Footer, null)
 		);
@@ -43,14 +46,13 @@ var App = React.createClass({
 var Header = React.createClass({
 	displayName: 'Header',
 
-
 	render: function render() {
 		return React.createElement(
 			'header',
 			null,
 			React.createElement(
 				'div',
-				{ className: 'row' },
+				{ className: 'row header' },
 				React.createElement(
 					'div',
 					{ className: 'col-header' },
@@ -61,6 +63,19 @@ var Header = React.createClass({
 							'h1',
 							null,
 							'ChrisGaneyMedia'
+						)
+					)
+				),
+				React.createElement(
+					'div',
+					{ className: 'col-nav' },
+					React.createElement(
+						'button',
+						{ className: 'home_btn', onClick: this.props.getHomePage },
+						React.createElement(
+							'p',
+							null,
+							'Home'
 						)
 					)
 				)
@@ -85,26 +100,103 @@ var Footer = React.createClass({
 					{ className: 'col-footer' },
 					React.createElement(
 						'div',
-						{ className: 'links' },
+						{ className: 'links_header' },
 						React.createElement(
-							'h5',
+							'h3',
 							null,
-							'Privacy Policy'
+							'Some of My Work'
+						)
+					)
+				)
+			),
+			React.createElement(
+				'div',
+				{ className: 'row' },
+				React.createElement(
+					'div',
+					{ className: 'col-links' },
+					React.createElement(
+						'div',
+						{ className: 'links_list' },
+						React.createElement(
+							'a',
+							{ href: 'http://github.com/ChristopherGaney' },
+							React.createElement(
+								'h5',
+								null,
+								'github.com/ChristopherGaney'
+							)
 						),
 						React.createElement(
-							'h5',
-							null,
-							'About Us'
+							'a',
+							{ href: 'http://www.mathmataz.com' },
+							React.createElement(
+								'h5',
+								null,
+								'www.mathmataz.com'
+							)
 						),
 						React.createElement(
-							'h5',
-							null,
-							'Contact'
+							'a',
+							{ href: 'http://festusxcboosters.org' },
+							React.createElement(
+								'h5',
+								null,
+								'festusxcboosters.org'
+							)
 						),
 						React.createElement(
-							'h5',
-							null,
-							'Site Map'
+							'a',
+							{ href: 'http://saintegenevievehome.com' },
+							React.createElement(
+								'h5',
+								null,
+								'saintegenevievehome.com'
+							)
+						),
+						React.createElement(
+							'a',
+							{ href: 'https://www.smashwords.com/books/view/488947' },
+							React.createElement(
+								'h5',
+								null,
+								'www.smashwords.com/'
+							)
+						)
+					)
+				),
+				React.createElement(
+					'div',
+					{ className: 'col-links' },
+					React.createElement(
+						'div',
+						{ className: 'links_list' },
+						React.createElement(
+							'a',
+							{ href: 'http://www.linkedin.com' },
+							React.createElement(
+								'h5',
+								null,
+								'https://linkedin.com'
+							)
+						),
+						React.createElement(
+							'a',
+							{ href: 'http://www.twitter.com' },
+							React.createElement(
+								'h5',
+								null,
+								'https://twitter.com'
+							)
+						),
+						React.createElement(
+							'a',
+							{ href: 'http://www.facebook.com' },
+							React.createElement(
+								'h5',
+								null,
+								'https://facebook.com'
+							)
 						)
 					)
 				)
@@ -116,16 +208,28 @@ var Footer = React.createClass({
 var AppState = function AppState(state) {
 	return {
 		message: state.message,
-		data: state.data,
+		posts: state.posts,
 		feature: state.feature
 	};
 };
 
 var AppDispatch = function AppDispatch(dispatch) {
 	return {
-		loadPage: function loadPage(data) {
+		fetchArticle: function fetchArticle(data) {
 			dispatch({
-				type: 'loadPage',
+				type: 'FETCH_ARTICLE',
+				data: data
+			});
+		},
+		goHome: function goHome(data) {
+			dispatch({
+				type: 'GO_HOME',
+				data: data
+			});
+		},
+		fetchFailure: function fetchFailure(data) {
+			dispatch({
+				type: 'FETCH_FAILURE',
 				data: data
 			});
 		}
