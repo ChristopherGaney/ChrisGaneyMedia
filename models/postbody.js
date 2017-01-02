@@ -8,6 +8,12 @@ var PostSchema = mongoose.Schema({
 	},
 	postbody: {
 		type: String
+	},
+	blogname: {
+		type: String
+	},
+	publishdate: {
+		type: String
 	}
 });
 

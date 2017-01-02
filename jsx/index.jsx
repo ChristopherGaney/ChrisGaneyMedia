@@ -12,7 +12,7 @@ var Index = React.createClass({
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<title>ChrisGaneyMedia</title>
-				<meta name="Description" CONTENT="Articles discussing Javascript, Node, React, functional programming" />
+				<meta name="Description" content="Articles discussing Javascript, Node, React, functional programming" />
 				<link rel="canonical" href="http://chrisganeymedia.com" />
 				<meta property="og:locale" content="en_US" />
 				<meta property="og:type" content="website" />

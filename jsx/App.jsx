@@ -56,9 +56,9 @@ var Footer = React.createClass({
 					</div>
 					<div className="col-links">
 						<div className="links_list">
-							<a href='http://www.linkedin.com' target='_blank'><h3>https://linkedin.com</h3></a>
-							<a href='http://www.twitter.com' target='_blank'><h3>https://twitter.com</h3></a>
-							<a href='http://www.facebook.com' target='_blank'><h3>https://facebook.com</h3></a>
+							<a href='https://www.linkedin.com/in/christopher-ganey-0b094b125' target='_blank'><h3>LinkedIn</h3></a>
+							<a href='https://twitter.com/ChrisGaneyMedia' target='_blank'><h3>Twitter</h3></a>
+							<a href='http://www.facebook.com/christophercganey' target='_blank'><h3>facebook</h3></a>
 						</div>
 					</div>
 				</div>

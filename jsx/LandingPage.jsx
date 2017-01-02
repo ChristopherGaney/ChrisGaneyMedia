@@ -11,9 +11,10 @@ var browserHistory = require('react-router').browserHistory;
 	
 	talkToServer: function(dats) {
 		this.props.fetchArticle({ message: 'loading...'});
-		axios.post(dats.toPage, {id: dats.id, blogname: dats.blogname})
+		axios.post(dats.toPage, {id: dats.id})
 				  .then(function (response) {
 					if(response.data.message === 'yes') {
+					console.log(response.data);
 						 this.props.loadArticle({feature: response.data.feature, url: response.data.url});
 						 browserHistory.push(response.data.url);
 						}
@@ -28,9 +29,12 @@ var browserHistory = require('react-router').browserHistory;
 	getArticle: function(id,name) {
 		var blogname = name.trim().split(' ').join('-');
 		var url = '/articles/' + blogname + '/' + id;
-		this.talkToServer({ toPage: url, id: id, blogname: name});
+		this.talkToServer({ toPage: url, id: id});
 	},
   render: function() {
+		var unescaped = unescape(this.props.feature.postbody.toString());
+		
+  console.log(this.props.feature.postid);
     return <div className="main_content">
 				<div className="row">
 					<div className="col-welcome welcome">
@@ -45,15 +49,15 @@ var browserHistory = require('react-router').browserHistory;
 						<div className="home_box">
 							<div className="blogbox">
 								<div className="date">
-									<h5>2016-12-26</h5>
+									<h5>{this.props.feature.publishdate}</h5>
 								</div>
 								<h2>{this.props.feature.blogname}</h2>
-								<h3>{this.props.feature.postbody}</h3>
+								<h3><span dangerouslySetInnerHTML={{__html: unescaped}} /></h3>
 							</div>
 						</div>
 					</div>
 					<div className="col-right">
-						<ArticleList posts={this.props.posts} blogId={this.props.feature.postid} getArticle={this.getArticle} />
+						<ArticleList posts={this.props.posts} getArticle={this.getArticle} />
 					</div>
 				</div>
 			</div>

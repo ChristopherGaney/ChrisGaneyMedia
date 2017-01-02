@@ -21,7 +21,8 @@ body {
   background-color: #F2F6F7; }
 footer {
 	background-color: #F5F6FA;
-	padding-top: 2rem;
+	padding-top: 2.5rem;
+	padding-bottom: 3rem;
 }
 h1 {
   font-size: 3rem;
@@ -142,6 +143,10 @@ a {
 	}
 }
 @media (min-width: 1000px) {
+	.welcome {
+		margin-top: 2rem;
+		margin-bottom: 2rem;
+	}
 	.welcome h2 {
 		font-size: 2.2rem;
 	}
