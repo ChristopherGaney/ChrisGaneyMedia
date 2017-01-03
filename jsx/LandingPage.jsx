@@ -3,7 +3,7 @@
 var React = require('react');
 var ReactRedux = require('react-redux');
 var ArticleList = require('./ArticleList');
-var marked = require('marked');
+var GoodArticles = require('./GoodArticles');
 var axios = require('axios');
 var browserHistory = require('react-router').browserHistory;
 
@@ -58,6 +58,7 @@ var browserHistory = require('react-router').browserHistory;
 					</div>
 					<div className="col-right">
 						<ArticleList posts={this.props.posts} getArticle={this.getArticle} />
+						<GoodArticles />
 					</div>
 				</div>
 			</div>

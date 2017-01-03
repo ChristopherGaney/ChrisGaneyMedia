@@ -1,3 +1,4 @@
+'use strict';
 
 var path = require('path');
 var express = require('express');
@@ -5,6 +6,10 @@ var bodyParser = require('body-parser');
 var app = express();
 var BlogPost = require('./models/blogpost');
 var PostBody = require('./models/postbody');
+var expressValidator = require('express-validator');
+var sanitizeHtml = require('sanitize-html');
+var favicon = require('serve-favicon');
+
 
 var mongoose = require('mongoose');
 var mongo = require('mongodb');
@@ -22,20 +27,35 @@ var db = mongoose.connection;
 
 var React = require('react');
 var ReactDOMServer = require('react-dom/server');
-
-app.use('/static', express.static('public'));
+app.use(favicon(__dirname + '/public/images/favicon.ico'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(expressValidator());
+app.use('/static', express.static('public'));
 
-
+function sanitizeString(string) {
+	string = string.replace(/&gt;/gi, '>');
+	string = string.replace(/&lt;/gi, '<');
+	string = string.replace(/(&copy;|&quot;|&amp;)/gi, '');
+	string = string.replace('$', '');
+	string = sanitizeHtml(string, {
+		allowedTags: [],
+		allowedAttributes: []
+		});
+	return string;
+}
 
 app.post(['/', '/articles/:title/:postid'], function(req, res) {
 	var id;
 	if(req.path === '/') {
 		id = req.body.id;
+		req.checkBody('id', 'Invalid Id').notEmpty();
+		id = sanitizeString(id);
 	}
 	else {
 		id = req.params.postid;
+		req.checkParams('id', 'Invalid Id').notEmpty();
+		id = sanitizeString(id);
 	}
 	var message = 'yes';
 	var feature = '';
@@ -83,8 +103,10 @@ app.get(['/', '/articles/:title/:postid'], function(req, res) {
   var store = require('./public/redux-store');
   var id = '';
   
-  if(req.params.title) {
+  if(req.params.postid) {
 	  id = req.params.postid;
+	  req.checkParams('id', 'Invalid Id').notEmpty();
+	  id = sanitizeString(id);
   }
 
 	BlogPost.getAllPostsById(function(err, posts) {
@@ -130,6 +152,19 @@ app.get(['/', '/articles/:title/:postid'], function(req, res) {
 	});
 
   });
+  
+app.use(function(req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
+
+if (app.get('env') === 'development') {
+    app.use(function(err, req, res, next) {
+        res.status(err.status || 500);
+        console.log(err);
+    });
+}
 
 app.listen(3000, function () {
 	console.log('Listening on port 3000...');

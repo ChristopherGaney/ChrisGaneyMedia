@@ -17,6 +17,9 @@ module.exports = React.createClass({
 			);
 		},this);
     return <div className="sidebar">
+				<div className="list_head">
+					<h3>Latests Posts</h3>
+				</div>
 			   <div className="list">
 					{articleNodes}
 				</div>

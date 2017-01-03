@@ -3,7 +3,7 @@
 var React = require('react');
 var ReactRedux = require('react-redux');
 var ArticleList = require('./ArticleList');
-var marked = require('marked');
+var GoodArticles = require('./GoodArticles');
 var axios = require('axios');
 var browserHistory = require('react-router').browserHistory;
 
@@ -40,9 +40,7 @@ var browserHistory = require('react-router').browserHistory;
 		this.talkToServer({ toPage: url, id: id});
 	},
   render: function() {
-		if(typeof window !== 'undefined') {
 			var unescaped = unescape(this.props.feature.postbody.toString());
-		}
     return <div className="main_content">
 				<div className="row">
 					<div className="col-nav">
@@ -63,6 +61,7 @@ var browserHistory = require('react-router').browserHistory;
 						</div>
 						<div className="bottom_list">
 							<ArticleList posts={this.props.posts} getArticle={this.getArticle} />
+							<GoodArticles />
 						</div>
 					</div>
 					
