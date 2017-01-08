@@ -1,4 +1,4 @@
-"use strict"
+"use strict" 
 
 var React = require('react');
 var ReactRedux = require('react-redux');
@@ -14,7 +14,6 @@ var browserHistory = require('react-router').browserHistory;
 		axios.post(dats.toPage, {id: dats.id})
 				  .then(function (response) {
 					if(response.data.message === 'yes') {
-					console.log(response.data);
 						 this.props.loadArticle({feature: response.data.feature, url: response.data.url});
 						 browserHistory.push(response.data.url);
 						}
@@ -33,8 +32,6 @@ var browserHistory = require('react-router').browserHistory;
 	},
   render: function() {
 		var unescaped = unescape(this.props.feature.postbody.toString());
-		
-  console.log(this.props.feature.postid);
     return <div className="main_content">
 				<div className="row">
 					<div className="col-welcome welcome">
@@ -57,8 +54,8 @@ var browserHistory = require('react-router').browserHistory;
 						</div>
 					</div>
 					<div className="col-right">
-						<ArticleList posts={this.props.posts} getArticle={this.getArticle} />
-						<GoodArticles />
+						<ArticleList posts={this.props.posts} getArticle={this.getArticle} name={'LandingPage'} />
+						<GoodArticles name={'LandingPage'} />
 					</div>
 				</div>
 			</div>

@@ -60,8 +60,8 @@ var browserHistory = require('react-router').browserHistory;
 							<h3><span dangerouslySetInnerHTML={{__html: unescaped}} /></h3>
 						</div>
 						<div className="bottom_list">
-							<ArticleList posts={this.props.posts} getArticle={this.getArticle} />
-							<GoodArticles />
+							<ArticleList posts={this.props.posts} getArticle={this.getArticle} name={'Articles'} />
+							<GoodArticles name={'Articles'} />
 						</div>
 					</div>
 					

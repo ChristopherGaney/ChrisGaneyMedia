@@ -4,9 +4,11 @@ var React = require('react');
 var ReactRedux = require('react-redux');
 
 module.exports = React.createClass({
+	
   render: function() {
+		var name = this.props.name === 'LandingPage' ? 'good_articles' : 'bottom_good_articles';
     return <div className="sidebar">
-				<div className="good_articles">
+				<div className={name}>
 					<h3>Good Articles</h3>
 				</div>
 				<div className="list">
