@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var app = express();
 var BlogPost = require('./models/blogpost');
 var PostBody = require('./models/postbody');
+var GoodArticles = require('./models/goodarticles');
 var expressValidator = require('express-validator');
 var sanitizeHtml = require('sanitize-html');
 var favicon = require('serve-favicon');
@@ -120,10 +121,12 @@ app.get(['/', '/articles/:title/:postid'], function(req, res) {
 				if(post) {
 					feature = post;
 				}
-		
+			
+			GoodArticles.getGoodArticles(function(articles) {
 			var initialState = {
 				message: 'yes',
 				posts: posts,
+				goodArticles: articles,
 				feature: feature,
 				url: req.path
 				
@@ -143,6 +146,7 @@ app.get(['/', '/articles/:title/:postid'], function(req, res) {
 		  } else {
 			res.status(404).send('Not found')
 		  }
+		});
 		});
 		});			
 		}

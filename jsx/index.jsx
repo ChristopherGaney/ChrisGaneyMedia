@@ -1,3 +1,6 @@
+'use strict';
+
+
 var React = require('react');
 var connect = require('react-redux').connect;
 var Link = require('react-router').Link;
@@ -10,7 +13,7 @@ var Index = React.createClass({
 		<html>
 			<head>
 				<meta charSet="utf-8" />
-				<meta name="viewport" content="width=device-width, initial-scale=1" />
+				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 				<title>ChrisGaneyMedia</title>
 				<meta name="Description" content="Articles discussing Javascript, Node, React, functional programming" />
 				<link rel="canonical" href="http://chrisganeymedia.com" />
@@ -33,6 +36,7 @@ var Index = React.createClass({
 						{this.props.children}
 					</div>
 				</div>	
+
 
 				{<script src="http://localhost:3000/static/bundle.js"></script>}
 

@@ -30,6 +30,9 @@ var browserHistory = require('react-router').browserHistory;
 		var url = '/articles/' + blogname + '/' + id;
 		this.talkToServer({ toPage: url, id: id});
 	},
+	setClicked: function(id) {
+		this.props.setArticleClicked({ _id: id });
+	},
   render: function() {
 		var unescaped = unescape(this.props.feature.postbody.toString());
     return <div className="main_content">
@@ -55,7 +58,7 @@ var browserHistory = require('react-router').browserHistory;
 					</div>
 					<div className="col-right">
 						<ArticleList posts={this.props.posts} getArticle={this.getArticle} name={'LandingPage'} />
-						<GoodArticles name={'LandingPage'} />
+						<GoodArticles goodArticles={this.props.goodArticles} setClicked={this.setClicked} name={'LandingPage'} />
 					</div>
 				</div>
 			</div>
@@ -66,6 +69,7 @@ var LandingPageState = function(state) {
   return {
     message: state.message,
     posts: state.posts,
+    goodArticles: state.goodArticles,
     feature: state.feature
   }
 }
@@ -89,7 +93,13 @@ var LandingPageDispatch = function(dispatch) {
         type: 'FETCH_FAILURE',
         data: data
       })
-    }
+    },
+    setArticleClicked: function(data) {
+		dispatch({
+        type: 'SET_CLICKED',
+        data: data
+      })
+     }
   }
 }
 

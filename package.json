@@ -10,11 +10,11 @@
     ]
   },
   "scripts": {
-    "transpile": "babel ./jsx/routes.jsx -o ./public/routes.js",
+    "transpile": "babel ./jsx/index.jsx -o ./public/index.js",
     "prebuild": "npm run transpile",
-    "build": "babel ./jsx/client.jsx -o ./public/client.js",
+    "build": "babel ./jsx/GoodArticles.jsx -o ./public/GoodArticles.js",
     "precompile": "npm run build",
-    "compile": "babel ./jsx/index.jsx -o ./public/index.js",
+    "compile": "babel ./jsx/LandingPage.jsx -o ./public/LandingPage.js",
     "watch": "watchify ./public/client.js -o ./public/bundle.js -v",
     "start": "npm run watch & nodemon server.js --ignore '/bundle.js'",
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -18,6 +18,21 @@ var reducer = function(state, action) {
     case 'FETCH_FAILURE':
       newState = Object.assign({}, state, { message: action.data.message })
       break;
+    case 'SET_CLICKED':
+      newState = Object.assign({}, state, { message: action.data.message })
+      break;
+    case 'SET_CLICKED':
+	  newState = Object.assign({}, state, {
+		goodArticles: state.goodArticles.map(function(art) {
+				if(action.data.id === art._id) {
+					return Object.assign({}, art, {
+						clicked: true
+					})
+				}
+				return art
+			})
+		})
+	  break;
   }
   return newState;
 }
@@ -27,3 +42,4 @@ module.exports = {
     return createStore(reducer, initialState)
   }
 }
+
