@@ -10,15 +10,15 @@ var browserHistory = require('react-router').browserHistory;
  var Articles = React.createClass({
 	
 	talkToServer: function(dats) {
-		this.props.fetchArticle({ message: 'loading...'});
+		this.props.fetchPost({ message: 'loading...'});
 		axios.post(dats.toPage, { id: dats.id })
 				  .then(function (response) {
 					if(response.data.message === 'yes' && dats.toPage === '/') {
-						 this.props.goHome({feature: response.data.feature, url: response.data.url});
+						 this.props.loadHomePost({feature: response.data.feature, message: ''});
 						 browserHistory.push(response.data.url);
 						}
 					else if(response.data.message === 'yes') {
-						 this.props.loadArticle({feature: response.data.feature, url: response.data.url});
+						 this.props.loadPost({feature: response.data.feature, message: ''});
 						 browserHistory.push(response.data.url);
 						}
 					
@@ -43,7 +43,7 @@ var browserHistory = require('react-router').browserHistory;
 		this.props.setArticleClicked({ _id: id });
 	},
   render: function() {
-			var unescaped = unescape(this.props.feature.postbody.toString());
+			var unescaped = unescape(this.props.feature.feature.postbody.toString());
     return <div className="main_content">
 				<div className="row">
 					<div className="col-nav">
@@ -57,9 +57,9 @@ var browserHistory = require('react-router').browserHistory;
 					<div className="col-center">
 						<div className="blogbox">
 							<div className="date">
-								<h5>{this.props.feature.publishdate}</h5>
+								<h5>{this.props.feature.feature.publishdate}</h5>
 							</div>
-							<h2>{this.props.feature.blogname}</h2>
+							<h2>{this.props.feature.feature.blogname}</h2>
 							<h3><span dangerouslySetInnerHTML={{__html: unescaped}} /></h3>
 						</div>
 						<div className="bottom_list">
@@ -74,32 +74,31 @@ var browserHistory = require('react-router').browserHistory;
   }
 })
 
-var ArticlesState = function(state) {
+var mapStateToProps = function(state) {
   return {
-    message: state.message,
     posts: state.posts,
     goodArticles: state.goodArticles,
     feature: state.feature
   }
 }
 
-var ArticlesDispatch = function(dispatch) {
+var mapDispatchToProps = function(dispatch) {
   return {
-    fetchArticle: function(data) {
+    fetchPost: function(data) {
       dispatch({
-        type: 'FETCH_ARTICLE',
+        type: 'FETCH_POST',
         data: data
       })
     },
-    loadArticle: function(data) {
+    loadPost: function(data) {
       dispatch({
-        type: 'LOAD_ARTICLE',
+        type: 'LOAD_POST',
         data: data
       })
     },
-    goHome: function(data) {
+    loadHomePost: function(data) {
       dispatch({
-        type: 'GO_HOME',
+        type: 'LOAD_HOME_POST',
         data: data
       })
     },
@@ -121,8 +120,8 @@ var ArticlesDispatch = function(dispatch) {
 var connect = ReactRedux.connect;
 
 Articles = connect(
-  ArticlesState,
-  ArticlesDispatch
+   mapStateToProps,
+  mapDispatchToProps
 )(Articles)
 
 

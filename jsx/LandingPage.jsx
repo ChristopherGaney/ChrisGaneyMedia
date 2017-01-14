@@ -8,13 +8,15 @@ var axios = require('axios');
 var browserHistory = require('react-router').browserHistory;
 
  var LandingPage = React.createClass({
-	
+	componentWillMount: function() {
+		console.log(this.props.feature);
+	},
 	talkToServer: function(dats) {
-		this.props.fetchArticle({ message: 'loading...'});
+		this.props.fetchPost({ message: 'loading...'});
 		axios.post(dats.toPage, {id: dats.id})
 				  .then(function (response) {
 					if(response.data.message === 'yes') {
-						 this.props.loadArticle({feature: response.data.feature, url: response.data.url});
+						 this.props.loadPost({feature: response.data.feature, message: ''});
 						 browserHistory.push(response.data.url);
 						}
 					else {
@@ -34,7 +36,7 @@ var browserHistory = require('react-router').browserHistory;
 		this.props.setArticleClicked({ _id: id });
 	},
   render: function() {
-		var unescaped = unescape(this.props.feature.postbody.toString());
+		var unescaped = unescape(this.props.home_feature.feature.postbody.toString());
     return <div className="main_content">
 				<div className="row">
 					<div className="col-welcome welcome">
@@ -49,9 +51,9 @@ var browserHistory = require('react-router').browserHistory;
 						<div className="home_box">
 							<div className="blogbox">
 								<div className="date">
-									<h5>{this.props.feature.publishdate}</h5>
+									<h5>{this.props.home_feature.feature.publishdate}</h5>
 								</div>
-								<h2>{this.props.feature.blogname}</h2>
+								<h2>{this.props.home_feature.feature.blogname}</h2>
 								<h3><span dangerouslySetInnerHTML={{__html: unescaped}} /></h3>
 							</div>
 						</div>
@@ -65,30 +67,30 @@ var browserHistory = require('react-router').browserHistory;
   }
 })
 
-var LandingPageState = function(state) {
+var mapStateToProps = function(state) {
+	console.log(state);
   return {
-    message: state.message,
     posts: state.posts,
     goodArticles: state.goodArticles,
-    feature: state.feature
+    home_feature: state.home_feature
   }
 }
 
-var LandingPageDispatch = function(dispatch) {
+var mapDispatchToProps = function(dispatch) {
   return {
-	fetchArticle: function(data) {
+	fetchPost: function(data) {
       dispatch({
-        type: 'FETCH_ARTICLE',
+        type: 'FETCH_POST',
         data: data
       })
     },
-    loadArticle: function(data) {
+    loadPost: function(data) {
       dispatch({
-        type: 'LOAD_ARTICLE',
+        type: 'LOAD_POST',
         data: data
       })
     },
-     fetchFailure: function(data) {
+    fetchFailure: function(data) {
       dispatch({
         type: 'FETCH_FAILURE',
         data: data
@@ -106,8 +108,8 @@ var LandingPageDispatch = function(dispatch) {
 var connect = ReactRedux.connect;
 
 LandingPage = connect(
-  LandingPageState,
-  LandingPageDispatch
+  mapStateToProps,
+  mapDispatchToProps
 )(LandingPage)
 
 

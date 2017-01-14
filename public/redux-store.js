@@ -1,26 +1,63 @@
 var createStore = require('redux').createStore;
+var combineReducers = require('redux').combineReducers;
 
-var reducer = function(state, action) {
+var posts = function(state, action) {
+	if(state === undefined) {
+    return {};
+  }
+  var newState = state;
+  switch(action.type) {
+    case 'SET_POSTS':
+      newState = Object.assign({}, state, { posts: action.data.posts })
+      break;
+ }
+  return newState;
+} 
+
+var feature = function(state, action) {
   if(state === undefined) {
     return {};
   }
   var newState = state;
   switch(action.type) {
-    case 'FETCH_ARTICLE':
+    case 'FETCH_POST':
       newState = Object.assign({}, state, { message: action.data.message })
       break;
-    case 'LOAD_ARTICLE':
-      newState = Object.assign({}, state, { feature: action.data.feature, url: action.data.url })
-      break;
-    case 'GO_HOME':
-      newState = Object.assign({}, state, { feature: action.data.feature, url: action.data.url })
+    case 'LOAD_POST':
+      newState = Object.assign({}, state, { feature: action.data.feature, message: action.data.message })
       break;
     case 'FETCH_FAILURE':
       newState = Object.assign({}, state, { message: action.data.message })
       break;
-    case 'SET_CLICKED':
+  }
+  return newState;
+}
+
+var home_feature = function(state, action) {
+  if(state === undefined) {
+    return {};
+  }
+  var newState = state;
+  switch(action.type) {
+	 case 'FETCH_POST':
       newState = Object.assign({}, state, { message: action.data.message })
       break;
+    case 'LOAD_HOME_POST':
+      newState = Object.assign({}, state, { feature: action.data.feature, message: action.data.message })
+      break;
+    case 'FETCH_FAILURE':
+      newState = Object.assign({}, state, { message: action.data.message })
+      break;
+  }
+  return newState;
+}
+
+var goodArticles = function(state, action) {
+  if(state === undefined) {
+    return {};
+  }
+  var newState = state;
+  switch(action.type) {
     case 'SET_CLICKED':
 	  newState = Object.assign({}, state, {
 		goodArticles: state.goodArticles.map(function(art) {
@@ -37,9 +74,16 @@ var reducer = function(state, action) {
   return newState;
 }
 
+var rootReducer = combineReducers({
+	posts,
+	feature,
+	home_feature,
+	goodArticles
+});
+
 module.exports = {
   configureStore: function(initialState) {
-    return createStore(reducer, initialState)
+    return createStore(rootReducer, initialState)
   }
 }
 

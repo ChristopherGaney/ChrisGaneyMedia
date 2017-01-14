@@ -64,13 +64,13 @@ app.post(['/', '/articles/:title/:postid'], function(req, res) {
 		if(post) {
 			feature = post;
 
-			var initialState = {
-				message: message,
+			var newState = {
+				message: 'yes',
 				feature: feature,
 				url: req.path
 			}
-	
-			res.json(initialState);
+			console.log(newState);
+			res.json(newState);
 		}
 	});		
 	
@@ -123,15 +123,23 @@ app.get(['/', '/articles/:title/:postid'], function(req, res) {
 				}
 			
 			GoodArticles.getGoodArticles(function(articles) {
-			var initialState = {
-				message: 'yes',
-				posts: posts,
-				goodArticles: articles,
-				feature: feature,
-				url: req.path
-				
-			};
+				if(req.path === '/') {
+					var initialState = {
+							posts: posts,
+							goodArticles: articles,
+							home_feature: {feature: feature, message: 'loading...'}
+						};
+				}
+				else {
+					var initialState = {
+							posts: posts,
+							goodArticles: articles,
+							feature: {feature: feature, message: 'loading...'}
+						};
+				}
+			
 			store = store.configureStore(initialState);
+		
 			match({routes: routes, location: req.url}, function(error, redirectLocation, renderProps) {
 				  if (error) {
 					res.status(500).send(error.message)
