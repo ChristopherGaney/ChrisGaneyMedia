@@ -10,15 +10,21 @@ var browserHistory = require('react-router').browserHistory;
  var Articles = React.createClass({
 	
 	talkToServer: function(dats) {
-		this.props.fetchPost({ message: 'loading...'});
+		if(dats.toPage === '/') {
+			this.props.fetchHomeFeature({ message: 'loading...'});
+		}
+		else {
+			this.props.fetchChosenFeature({ message: 'loading...'});
+		}
+		
 		axios.post(dats.toPage, { id: dats.id })
 				  .then(function (response) {
 					if(response.data.message === 'yes' && dats.toPage === '/') {
-						 this.props.loadHomePost({feature: response.data.feature, message: ''});
+						 this.props.loadHomeFeature({feature: response.data.feature, message: ''});
 						 browserHistory.push(response.data.url);
 						}
 					else if(response.data.message === 'yes') {
-						 this.props.loadPost({feature: response.data.feature, message: ''});
+						 this.props.loadChosenFeature({feature: response.data.feature, message: ''});
 						 browserHistory.push(response.data.url);
 						}
 					
@@ -42,8 +48,11 @@ var browserHistory = require('react-router').browserHistory;
 	setClicked: function(id) {
 		this.props.setArticleClicked({ _id: id });
 	},
+	componentDidUpdate() {
+		window.scrollTo(0, 0);
+	},
   render: function() {
-			var unescaped = unescape(this.props.feature.feature.postbody.toString());
+			var unescaped = unescape(this.props.chosen_feature.feature.postbody.toString());
     return <div className="main_content">
 				<div className="row">
 					<div className="col-nav">
@@ -57,9 +66,9 @@ var browserHistory = require('react-router').browserHistory;
 					<div className="col-center">
 						<div className="blogbox">
 							<div className="date">
-								<h5>{this.props.feature.feature.publishdate}</h5>
+								<h5>{this.props.chosen_feature.feature.publishdate}</h5>
 							</div>
-							<h2>{this.props.feature.feature.blogname}</h2>
+							<h2>{this.props.chosen_feature.feature.blogname}</h2>
 							<h3><span dangerouslySetInnerHTML={{__html: unescaped}} /></h3>
 						</div>
 						<div className="bottom_list">
@@ -78,27 +87,33 @@ var mapStateToProps = function(state) {
   return {
     posts: state.posts,
     goodArticles: state.goodArticles,
-    feature: state.feature
+    chosen_feature: state.chosen_feature
   }
 }
 
 var mapDispatchToProps = function(dispatch) {
   return {
-    fetchPost: function(data) {
+    fetchChosenFeature: function(data) {
       dispatch({
-        type: 'FETCH_POST',
+        type: 'FETCH_CHOSEN_FEATURE',
         data: data
       })
     },
-    loadPost: function(data) {
+     fetchHomeFeature: function(data) {
       dispatch({
-        type: 'LOAD_POST',
+        type: 'FETCH_HOME_FEATURE',
         data: data
       })
     },
-    loadHomePost: function(data) {
+    loadChosenFeature: function(data) {
       dispatch({
-        type: 'LOAD_HOME_POST',
+        type: 'LOAD_CHOSEN_FEATURE',
+        data: data
+      })
+    },
+    loadHomeFeature: function(data) {
+      dispatch({
+        type: 'LOAD_HOME_FEATURE',
         data: data
       })
     },

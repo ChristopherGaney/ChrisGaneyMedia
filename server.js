@@ -134,7 +134,7 @@ app.get(['/', '/articles/:title/:postid'], function(req, res) {
 					var initialState = {
 							posts: posts,
 							goodArticles: articles,
-							feature: {feature: feature, message: 'loading...'}
+							chosen_feature: {feature: feature, message: 'loading...'}
 						};
 				}
 			

@@ -14,16 +14,17 @@ var posts = function(state, action) {
   return newState;
 } 
 
-var feature = function(state, action) {
+var chosen_feature = function(state, action) {
+	console.log('ran');
   if(state === undefined) {
     return {};
   }
   var newState = state;
   switch(action.type) {
-    case 'FETCH_POST':
+    case 'FETCH_CHOSEN_FEATURE':
       newState = Object.assign({}, state, { message: action.data.message })
       break;
-    case 'LOAD_POST':
+    case 'LOAD_CHOSEN_FEATURE':
       newState = Object.assign({}, state, { feature: action.data.feature, message: action.data.message })
       break;
     case 'FETCH_FAILURE':
@@ -39,10 +40,10 @@ var home_feature = function(state, action) {
   }
   var newState = state;
   switch(action.type) {
-	 case 'FETCH_POST':
+	 case 'FETCH_HOME_FEATURE':
       newState = Object.assign({}, state, { message: action.data.message })
       break;
-    case 'LOAD_HOME_POST':
+    case 'LOAD_HOME_FEATURE':
       newState = Object.assign({}, state, { feature: action.data.feature, message: action.data.message })
       break;
     case 'FETCH_FAILURE':
@@ -76,7 +77,7 @@ var goodArticles = function(state, action) {
 
 var rootReducer = combineReducers({
 	posts,
-	feature,
+	chosen_feature,
 	home_feature,
 	goodArticles
 });

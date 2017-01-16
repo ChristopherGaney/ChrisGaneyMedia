@@ -8,15 +8,14 @@ var axios = require('axios');
 var browserHistory = require('react-router').browserHistory;
 
  var LandingPage = React.createClass({
-	componentWillMount: function() {
-		console.log(this.props.feature);
-	},
+	
 	talkToServer: function(dats) {
-		this.props.fetchPost({ message: 'loading...'});
+		this.props.fetchChosenFeature({ message: 'loading...'});
 		axios.post(dats.toPage, {id: dats.id})
 				  .then(function (response) {
 					if(response.data.message === 'yes') {
-						 this.props.loadPost({feature: response.data.feature, message: ''});
+						console.log(response.data);
+						 this.props.loadChosenFeature({feature: response.data.feature, message: 'loaded'});
 						 browserHistory.push(response.data.url);
 						}
 					else {
@@ -78,15 +77,16 @@ var mapStateToProps = function(state) {
 
 var mapDispatchToProps = function(dispatch) {
   return {
-	fetchPost: function(data) {
+	fetchChosenFeature: function(data) {
       dispatch({
-        type: 'FETCH_POST',
+        type: 'FETCH_CHOSEN_FEATURE',
         data: data
       })
     },
-    loadPost: function(data) {
+    loadChosenFeature: function(data) {
+    console.log('here ' + data);
       dispatch({
-        type: 'LOAD_POST',
+        type: 'LOAD_CHOSEN_FEATURE',
         data: data
       })
     },
