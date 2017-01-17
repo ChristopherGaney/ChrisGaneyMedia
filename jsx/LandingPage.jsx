@@ -6,26 +6,29 @@ var ArticleList = require('./ArticleList');
 var GoodArticles = require('./GoodArticles');
 var axios = require('axios');
 var browserHistory = require('react-router').browserHistory;
+var Actions = require('./actions');
+var bindActionCreators = require('redux').bindActionCreators;
+var connect = ReactRedux.connect;
 
  var LandingPage = React.createClass({
-	
 	talkToServer: function(dats) {
-		this.props.fetchChosenFeature({ message: 'loading...'});
+		this.props.actions.fetchChosenFeature({ message: 'loading...'});
 		axios.post(dats.toPage, {id: dats.id})
 				  .then(function (response) {
 					if(response.data.message === 'yes') {
 						console.log(response.data);
-						 this.props.loadChosenFeature({feature: response.data.feature, message: 'loaded'});
+						 this.props.actions.loadChosenFeature({feature: response.data.feature, message: 'loaded'});
 						 browserHistory.push(response.data.url);
 						}
 					else {
-						this.props.fetchFailure({ message: 'Failure Loading Page'});
+						this.props.actions.fetchFailure({ message: 'Failure Loading Page'});
 						}
 				  }.bind( this ))
 				  .catch(function (error) {
 					console.log(error);
 				  });
 	},
+	
 	getArticle: function(id,name) {
 		var blogname = name.trim().split(' ').join('-');
 		var url = '/articles/' + blogname + '/' + id;
@@ -33,6 +36,9 @@ var browserHistory = require('react-router').browserHistory;
 	},
 	setClicked: function(id) {
 		this.props.setArticleClicked({ _id: id });
+	},
+	componentDidMount() {
+		window.scrollTo(0, 0);
 	},
   render: function() {
 		var unescaped = unescape(this.props.home_feature.feature.postbody.toString());
@@ -67,7 +73,6 @@ var browserHistory = require('react-router').browserHistory;
 })
 
 var mapStateToProps = function(state) {
-	console.log(state);
   return {
     posts: state.posts,
     goodArticles: state.goodArticles,
@@ -76,41 +81,12 @@ var mapStateToProps = function(state) {
 }
 
 var mapDispatchToProps = function(dispatch) {
-  return {
-	fetchChosenFeature: function(data) {
-      dispatch({
-        type: 'FETCH_CHOSEN_FEATURE',
-        data: data
-      })
-    },
-    loadChosenFeature: function(data) {
-    console.log('here ' + data);
-      dispatch({
-        type: 'LOAD_CHOSEN_FEATURE',
-        data: data
-      })
-    },
-    fetchFailure: function(data) {
-      dispatch({
-        type: 'FETCH_FAILURE',
-        data: data
-      })
-    },
-    setArticleClicked: function(data) {
-		dispatch({
-        type: 'SET_CLICKED',
-        data: data
-      })
-     }
-  }
+	return {actions: bindActionCreators(Actions, dispatch)}
 }
-
-var connect = ReactRedux.connect;
 
 LandingPage = connect(
   mapStateToProps,
   mapDispatchToProps
 )(LandingPage)
-
 
 module.exports = LandingPage;
