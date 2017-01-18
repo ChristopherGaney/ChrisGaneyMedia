@@ -140,6 +140,9 @@ a {
 .sidebar .list_head {
 	margin-top: -.5rem;
 }
+.hasclicked h4, .hasclicked h5 {
+	color: #17586E;
+}
 @media (min-width: 550px) {
 	html {
 		font-size: 75%;

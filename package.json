@@ -10,9 +10,9 @@
     ]
   },
   "scripts": {
-    "transpile": "babel ./jsx/index.jsx -o ./public/index.js",
+    "transpile": "babel ./jsx/GoodArticles.jsx -o ./public/GoodArticles.js",
     "prebuild": "npm run transpile",
-    "build": "babel ./jsx/GoodArticles.jsx -o ./public/GoodArticles.js",
+    "build": "babel ./jsx/Articles.jsx -o ./public/Articles.js",
     "precompile": "npm run build",
     "compile": "babel ./jsx/LandingPage.jsx -o ./public/LandingPage.js",
     "watch": "watchify ./public/client.js -o ./public/bundle.js -v",
@@ -36,6 +36,7 @@
     "react-redux": "^5.0.1",
     "react-router": "^3.0.0",
     "redux": "^3.6.0",
+    "redux-thunk": "^2.1.0",
     "sanitize-html": "^1.13.0",
     "serve-favicon": "^2.3.2",
     "util": "^0.10.3"

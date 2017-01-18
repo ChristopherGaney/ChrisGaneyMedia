@@ -11,37 +11,15 @@ var bindActionCreators = require('redux').bindActionCreators;
 var connect = ReactRedux.connect;
 
  var LandingPage = React.createClass({
-	talkToServer: function(dats) {
-		this.props.actions.fetchChosenFeature({ message: 'loading...'});
-		axios.post(dats.toPage, {id: dats.id})
-				  .then(function (response) {
-					if(response.data.message === 'yes') {
-						console.log(response.data);
-						 this.props.actions.loadChosenFeature({feature: response.data.feature, message: 'loaded'});
-						 browserHistory.push(response.data.url);
-						}
-					else {
-						this.props.actions.fetchFailure({ message: 'Failure Loading Page'});
-						}
-				  }.bind( this ))
-				  .catch(function (error) {
-					console.log(error);
-				  });
-	},
 	
-	getArticle: function(id,name) {
-		var blogname = name.trim().split(' ').join('-');
-		var url = '/articles/' + blogname + '/' + id;
-		this.talkToServer({ toPage: url, id: id});
-	},
-	setClicked: function(id) {
-		this.props.setArticleClicked({ _id: id });
-	},
 	componentDidMount() {
 		window.scrollTo(0, 0);
 	},
+	
   render: function() {
-		var unescaped = unescape(this.props.home_feature.feature.postbody.toString());
+  
+	var unescaped = unescape(this.props.home_feature.feature.postbody.toString());
+		
     return <div className="main_content">
 				<div className="row">
 					<div className="col-welcome welcome">
@@ -64,13 +42,14 @@ var connect = ReactRedux.connect;
 						</div>
 					</div>
 					<div className="col-right">
-						<ArticleList posts={this.props.posts} getArticle={this.getArticle} name={'LandingPage'} />
-						<GoodArticles goodArticles={this.props.goodArticles} setClicked={this.setClicked} name={'LandingPage'} />
+						<ArticleList posts={this.props.posts} getArticle={this.props.actions.getArticle} name={'LandingPage'} />
+						<GoodArticles goodArticles={this.props.goodArticles} setClicked={this.props.actions.setArticleClicked} name={'LandingPage'} />
 					</div>
 				</div>
 			</div>
   }
 })
+
 
 var mapStateToProps = function(state) {
   return {

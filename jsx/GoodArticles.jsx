@@ -5,11 +5,12 @@ var ReactRedux = require('react-redux');
 
 module.exports = React.createClass({
 	onChoose: function(id) {
-		console.log('choosen');
-		this.props.setClicked(id);
+		this.props.setClicked({ id: id });
 	},
   render: function() {
+  
 		var name = this.props.name === 'LandingPage' ? 'good_articles' : 'bottom_good_articles';
+
 		console.log(this.props.goodArticles);
 		var articleNodes = this.props.goodArticles.map(function(article) {
 			return (
@@ -31,7 +32,10 @@ module.exports = React.createClass({
  var Article = React.createClass({
 		
   render: function() {
-    return <a href={this.props.articleUrl} target="_blank" onClick={this.props.onChoose} >
+  
+	var name = this.props.clicked ? 'hasclicked' : '';
+	
+    return <a className={name} href={this.props.articleUrl} target="_blank" onClick={this.props.onChoose} >
 				<h4>{this.props.articleTitle}</h4>
 				<h5>{this.props.articleAuthor}</h5>
 			</a>

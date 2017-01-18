@@ -1,5 +1,8 @@
 var createStore = require('redux').createStore;
 var combineReducers = require('redux').combineReducers;
+var thunkMiddleware = require('redux-thunk').default;
+var applyMiddleware = require('redux').applyMiddleware;
+
 
 var posts = function(state, action) {
 	if(state === undefined) {
@@ -15,13 +18,13 @@ var posts = function(state, action) {
 } 
 
 var chosen_feature = function(state, action) {
-	console.log('ran');
   if(state === undefined) {
     return {};
   }
   var newState = state;
   switch(action.type) {
     case 'FETCH_CHOSEN_FEATURE':
+    console.log('in reducer');
       newState = Object.assign({}, state, { message: action.data.message })
       break;
     case 'LOAD_CHOSEN_FEATURE':
@@ -60,6 +63,7 @@ var goodArticles = function(state, action) {
   var newState = state;
   switch(action.type) {
     case 'SET_CLICKED':
+    console.log('called');
 	  newState = Object.assign({}, state, {
 		goodArticles: state.goodArticles.map(function(art) {
 				if(action.data.id === art._id) {
@@ -84,7 +88,7 @@ var rootReducer = combineReducers({
 
 module.exports = {
   configureStore: function(initialState) {
-    return createStore(rootReducer, initialState)
+    return createStore(rootReducer, initialState, applyMiddleware(thunkMiddleware))
   }
 }
 
