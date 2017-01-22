@@ -63,27 +63,26 @@ var goodArticles = function(state, action) {
   var newState = state;
   switch(action.type) {
     case 'SET_CLICKED':
-    console.log('called');
-	  newState = Object.assign({}, state, {
-		goodArticles: state.goodArticles.map(function(art) {
+	  newState = state.map(function(art) {
 				if(action.data.id === art._id) {
 					return Object.assign({}, art, {
 						clicked: true
 					})
 				}
-				return art
+				else {
+					return Object.assign({}, art)
+			}
 			})
-		})
 	  break;
   }
   return newState;
 }
 
 var rootReducer = combineReducers({
-	posts,
-	chosen_feature,
-	home_feature,
-	goodArticles
+	posts: posts,
+	chosen_feature: chosen_feature,
+	home_feature: home_feature,
+	goodArticles: goodArticles
 });
 
 module.exports = {

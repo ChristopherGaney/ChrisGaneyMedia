@@ -110,7 +110,7 @@ app.get(['/', '/articles/:title/:postid'], function(req, res) {
 	  id = sanitizeString(id);
   }
 
-	BlogPost.getAllPostsById(function(err, posts) {
+	BlogPost.getAllPosts(function(err, posts) {
 		var message = 'yes';
 		var feature = '';
 		if(posts) {
@@ -123,15 +123,16 @@ app.get(['/', '/articles/:title/:postid'], function(req, res) {
 				}
 			
 			GoodArticles.getGoodArticles(function(articles) {
+				var initialState = {};
 				if(req.path === '/') {
-					var initialState = {
+					initialState = {
 							posts: posts,
 							goodArticles: articles,
 							home_feature: {feature: feature, message: 'loading...'}
 						};
 				}
 				else {
-					var initialState = {
+					initialState = {
 							posts: posts,
 							goodArticles: articles,
 							chosen_feature: {feature: feature, message: 'loading...'}
@@ -178,8 +179,10 @@ if (app.get('env') === 'development') {
     });
 }
 
-app.listen(3000, function () {
-	console.log('Listening on port 3000...');
-});
+var port = process.env.PORT || 3000;
+
+app.listen(port, function(){
+	console.log("Listening on: " + port);
+	});
 
 

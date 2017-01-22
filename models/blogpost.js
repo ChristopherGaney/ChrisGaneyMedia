@@ -26,7 +26,7 @@ module.exports.createOrUpdate = function(currEvent, callback){
 	currEvent.save(currEvent, callback);
 }
 
-module.exports.getAllPostsById = function(callback){
+module.exports.getAllPosts = function(callback){
 	BlogPost.find().sort({_id: -1}).exec(callback);
 }
 module.exports.getPostById = function(id, callback){
