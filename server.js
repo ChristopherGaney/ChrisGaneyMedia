@@ -56,7 +56,22 @@ var _server = require('react-dom/server');
 
 var _server2 = _interopRequireDefault(_server);
 
+var _reactRouter = require('react-router');
+
+var _reactRouter2 = _interopRequireDefault(_reactRouter);
+
+var _reactRedux = require('react-redux');
+
+var _routes = require('./public/routes.js');
+
+var _reduxStore = require('./public/redux-store');
+
+var _reduxStore2 = _interopRequireDefault(_reduxStore);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var routeContext = _react2.default.createFactory(_reactRouter.RouterContext);
+var provider = _react2.default.createFactory(_reactRedux.Provider);
 
 var MongoClient = _mongodb2.default.MongoClient;
 var testedUrl = 'mongodb://localhost:27017/chrisganeymedia';
@@ -90,7 +105,7 @@ var sanitizeString = function sanitizeString(string) {
 };
 
 app.post(['/', '/articles/:title/:postid'], function (req, res) {
-	var id;
+	var id = '';
 	if (req.path === '/') {
 		id = req.body.id;
 		req.checkBody('id', 'Invalid Id').notEmpty();
@@ -136,12 +151,7 @@ app.get('/admin', function (req, res) {
 });
 
 app.get(['/', '/articles/:title/:postid'], function (req, res) {
-	var ReactRouter = require('react-router');
-	var match = ReactRouter.match;
-	var RouterContext = _react2.default.createFactory(ReactRouter.RouterContext);
-	var Provider = _react2.default.createFactory(require('react-redux').Provider);
-	var routes = require('./public/routes.js').routes;
-	var store = require('./public/redux-store');
+
 	var id = '';
 
 	if (req.params.postid) {
@@ -178,15 +188,15 @@ app.get(['/', '/articles/:title/:postid'], function (req, res) {
 						};
 					}
 
-					store = store.configureStore(initialState);
+					var Store = _reduxStore2.default.configureStore(initialState);
 
-					match({ routes: routes, location: req.url }, function (error, redirectLocation, renderProps) {
+					(0, _reactRouter.match)({ routes: _routes.routes, location: req.url }, function (error, redirectLocation, renderProps) {
 						if (error) {
 							res.status(500).send(error.message);
 						} else if (redirectLocation) {
 							res.redirect(302, redirectLocation.pathname + redirectLocation.search);
 						} else if (renderProps) {
-							res.send("<!DOCTYPE html>" + _server2.default.renderToString(Provider({ store: store }, RouterContext(renderProps))));
+							res.send("<!DOCTYPE html>" + _server2.default.renderToString(provider({ store: Store }, routeContext(renderProps))));
 						} else {
 							res.status(404).send('Not found');
 						}

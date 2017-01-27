@@ -13,6 +13,15 @@ import mongoose from 'mongoose';
 import mongo from 'mongodb';
 import assert from 'assert';
 
+import React from 'react';
+import ReactDOMServer from 'react-dom/server';
+import ReactRouter, { match, RouterContext } from 'react-router';
+import { Provider } from 'react-redux';
+import { routes } from './public/routes.js';
+import store from './public/redux-store';
+let routeContext = React.createFactory(RouterContext);
+let provider = React.createFactory(Provider);
+
 const MongoClient = mongo.MongoClient;
 let testedUrl = 'mongodb://localhost:27017/chrisganeymedia';
 MongoClient.connect(testedUrl, function(err, db) {
@@ -25,9 +34,6 @@ mongoose.connect('mongodb://localhost:27017/chrisganeymedia');
 const db = mongoose.connection;
 
 const app = express();
-
-import React from 'react';
-import ReactDOMServer from 'react-dom/server';
  
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
 app.use(bodyParser.json());
@@ -48,7 +54,7 @@ const sanitizeString = (string) => {
 }
 
 app.post(['/', '/articles/:title/:postid'], function(req, res) {
-	var id;
+	let id = '';
 	if(req.path === '/') {
 		id = req.body.id;
 		req.checkBody('id', 'Invalid Id').notEmpty();
@@ -59,13 +65,13 @@ app.post(['/', '/articles/:title/:postid'], function(req, res) {
 		req.checkParams('id', 'Invalid Id').notEmpty();
 		id = sanitizeString(id);
 	}
-	var message = 'yes';
-	var feature = '';
+	let message = 'yes';
+	let feature = '';
 	PostBody.getBodyByPostId(id, function(err, post) {
 		if(post) {
 			feature = post;
 
-			var newState = {
+			const newState = {
 				message: 'yes',
 				feature: feature,
 				url: req.path
@@ -78,13 +84,13 @@ app.post(['/', '/articles/:title/:postid'], function(req, res) {
 });
 
 app.get('/admin', function(req, res) {
-	var curr = new PostBody({ });
+	const curr = new PostBody({ });
 
 	PostBody.createOrUpdate(curr, function(err, post) {
 		if(post) {
 			feature = post;
 
-			var initialState = {
+			const initialState = {
 				
 				feature: feature
 
@@ -97,13 +103,8 @@ app.get('/admin', function(req, res) {
   });
 
 app.get(['/', '/articles/:title/:postid'], function(req, res) {
-	  var ReactRouter = require('react-router');
-	  var match = ReactRouter.match;
-	  var RouterContext = React.createFactory(ReactRouter.RouterContext);
-	  var Provider = React.createFactory(require('react-redux').Provider);
-	  var routes = require('./public/routes.js').routes
-	  var store = require('./public/redux-store');
-	  var id = '';
+	 
+	  let id = '';
   
   if(req.params.postid) {
 	  id = req.params.postid;
@@ -112,8 +113,8 @@ app.get(['/', '/articles/:title/:postid'], function(req, res) {
   }
 
 	BlogPost.getAllPosts(function(err, posts) {
-		var message = 'yes';
-		var feature = '';
+		let message = 'yes';
+		let feature = '';
 		if(posts) {
 			if(id === '') {
 				id = posts[0]._id;
@@ -124,7 +125,7 @@ app.get(['/', '/articles/:title/:postid'], function(req, res) {
 				}
 			
 			GoodArticles.getGoodArticles(function(articles) {
-				var initialState = {};
+				let initialState = {};
 				if(req.path === '/') {
 					initialState = {
 							posts: posts,
@@ -140,7 +141,7 @@ app.get(['/', '/articles/:title/:postid'], function(req, res) {
 						};
 				}
 			
-			store = store.configureStore(initialState);
+			const Store = store.configureStore(initialState);
 		
 			match({routes: routes, location: req.url}, function(error, redirectLocation, renderProps) {
 				  if (error) {
@@ -150,7 +151,7 @@ app.get(['/', '/articles/:title/:postid'], function(req, res) {
 				  } else if (renderProps) {
 					res.send("<!DOCTYPE html>"+
 					  ReactDOMServer.renderToString(
-						Provider({store: store}, RouterContext(renderProps))
+						provider({store: Store}, routeContext(renderProps))
 					  )
 					);
 		  } else {
@@ -168,7 +169,7 @@ app.get(['/', '/articles/:title/:postid'], function(req, res) {
   });
   
 app.use(function(req, res, next) {
-    var err = new Error('Not Found');
+    const err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
@@ -180,7 +181,7 @@ if (app.get('env') === 'development') {
     });
 }
 
-var port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
 app.listen(port, function(){
 	console.log("Listening on: " + port);
