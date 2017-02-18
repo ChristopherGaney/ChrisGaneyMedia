@@ -12,7 +12,7 @@ var LandingPage = require('./LandingPage');
   render: function() {
 	
     return <div id="wrapper" className="wrapper">
-					<Header getHomePage={this.getHomePage} />
+					<Header />
 					{this.props.children}
 					<Footer />
 			</div>
