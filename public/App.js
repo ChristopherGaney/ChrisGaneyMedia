@@ -4,39 +4,18 @@ var React = require('react');
 var ReactRedux = require('react-redux');
 var Router = require('react-router').Router;
 var Route = require('react-router').Route;
-var Link = require('react-router').Link;
-var marked = require('marked');
-var axios = require('axios');
 var LandingPage = require('./LandingPage');
-var browserHistory = require('react-router').browserHistory;
 
 var App = React.createClass({
 	displayName: 'App',
 
-	talkToServer: function talkToServer(dats) {
-		this.props.fetchArticle({ message: 'loading...' });
-		axios.post(dats.toPage, { id: dats.id, blogname: dats.blogname }).then(function (response) {
-			if (response.data.message === 'yes') {
-				this.props.goHome({ feature: response.data.feature, url: response.data.url });
-				browserHistory.push(response.data.url);
-			} else {
-				this.props.fetchFailure({ message: 'Failure Loading Page' });
-			}
-		}.bind(this)).catch(function (error) {
-			console.log(error);
-		});
-	},
-	getHomePage: function getHomePage(id) {
-		var id = this.props.posts[0]._id;
-		var name = this.props.posts[0].blogname;
-		this.talkToServer({ toPage: '/', id: id, blogname: name });
-	},
+
 	render: function render() {
 
 		return React.createElement(
 			'div',
 			{ id: 'wrapper', className: 'wrapper' },
-			React.createElement(Header, { getHomePage: this.getHomePage }),
+			React.createElement(Header, null),
 			this.props.children,
 			React.createElement(Footer, null)
 		);
@@ -63,19 +42,6 @@ var Header = React.createClass({
 							'h1',
 							null,
 							'ChrisGaneyMedia'
-						)
-					)
-				),
-				React.createElement(
-					'div',
-					{ className: 'col-nav' },
-					React.createElement(
-						'button',
-						{ className: 'home_btn', onClick: this.props.getHomePage },
-						React.createElement(
-							'p',
-							null,
-							'Home'
 						)
 					)
 				)
@@ -120,47 +86,47 @@ var Footer = React.createClass({
 						{ className: 'links_list' },
 						React.createElement(
 							'a',
-							{ href: 'http://github.com/ChristopherGaney' },
+							{ href: 'http://github.com/ChristopherGaney', target: '_blank' },
 							React.createElement(
-								'h5',
+								'h3',
 								null,
 								'github.com/ChristopherGaney'
 							)
 						),
 						React.createElement(
 							'a',
-							{ href: 'http://www.mathmataz.com' },
+							{ href: 'http://www.mathmataz.com', target: '_blank' },
 							React.createElement(
-								'h5',
+								'h3',
 								null,
 								'www.mathmataz.com'
 							)
 						),
 						React.createElement(
 							'a',
-							{ href: 'http://festusxcboosters.org' },
+							{ href: 'http://festusxcboosters.org', target: '_blank' },
 							React.createElement(
-								'h5',
+								'h3',
 								null,
 								'festusxcboosters.org'
 							)
 						),
 						React.createElement(
 							'a',
-							{ href: 'http://saintegenevievehome.com' },
+							{ href: 'http://saintegenevievehome.com', target: '_blank' },
 							React.createElement(
-								'h5',
+								'h3',
 								null,
 								'saintegenevievehome.com'
 							)
 						),
 						React.createElement(
 							'a',
-							{ href: 'https://www.smashwords.com/books/view/488947' },
+							{ href: 'https://www.smashwords.com/books/view/488947', target: '_blank' },
 							React.createElement(
-								'h5',
+								'h3',
 								null,
-								'www.smashwords.com/'
+								'Monstrato: a novel'
 							)
 						)
 					)
@@ -173,29 +139,29 @@ var Footer = React.createClass({
 						{ className: 'links_list' },
 						React.createElement(
 							'a',
-							{ href: 'http://www.linkedin.com' },
+							{ href: 'https://www.linkedin.com/in/christopher-ganey-0b094b125', target: '_blank' },
 							React.createElement(
-								'h5',
+								'h3',
 								null,
-								'https://linkedin.com'
+								'LinkedIn'
 							)
 						),
 						React.createElement(
 							'a',
-							{ href: 'http://www.twitter.com' },
+							{ href: 'https://twitter.com/ChrisGaneyMedia', target: '_blank' },
 							React.createElement(
-								'h5',
+								'h3',
 								null,
-								'https://twitter.com'
+								'Twitter'
 							)
 						),
 						React.createElement(
 							'a',
-							{ href: 'http://www.facebook.com' },
+							{ href: 'http://www.facebook.com/christophercganey', target: '_blank' },
 							React.createElement(
-								'h5',
+								'h3',
 								null,
-								'https://facebook.com'
+								'facebook'
 							)
 						)
 					)
@@ -204,40 +170,5 @@ var Footer = React.createClass({
 		);
 	}
 });
-
-var AppState = function AppState(state) {
-	return {
-		message: state.message,
-		posts: state.posts,
-		feature: state.feature
-	};
-};
-
-var AppDispatch = function AppDispatch(dispatch) {
-	return {
-		fetchArticle: function fetchArticle(data) {
-			dispatch({
-				type: 'FETCH_ARTICLE',
-				data: data
-			});
-		},
-		goHome: function goHome(data) {
-			dispatch({
-				type: 'GO_HOME',
-				data: data
-			});
-		},
-		fetchFailure: function fetchFailure(data) {
-			dispatch({
-				type: 'FETCH_FAILURE',
-				data: data
-			});
-		}
-	};
-};
-
-var connect = ReactRedux.connect;
-
-App = connect(AppState, AppDispatch)(App);
 
 module.exports = App;

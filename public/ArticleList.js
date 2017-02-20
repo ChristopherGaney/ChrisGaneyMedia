@@ -12,13 +12,22 @@ module.exports = React.createClass({
 		this.props.getArticle(id, name);
 	},
 	render: function render() {
-
+		var name = this.props.name === 'LandingPage' ? 'list_head' : 'bottom_list_head';
 		var articleNodes = this.props.posts.map(function (article) {
 			return React.createElement(Article, { blogname: article.blogname, key: article._id, id: article._id, onChoose: this.onChoose.bind(this, article._id, article.blogname) });
 		}, this);
 		return React.createElement(
 			'div',
 			{ className: 'sidebar' },
+			React.createElement(
+				'div',
+				{ className: name },
+				React.createElement(
+					'h3',
+					null,
+					'Latests Posts'
+				)
+			),
 			React.createElement(
 				'div',
 				{ className: 'list' },
